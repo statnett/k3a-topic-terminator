@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 // Using profile to disable scheduling for tests
 @ActiveProfiles("spring-boot-test")
 public class ApplicationTest {
+    public static final String TOPIC_INTERNAL = "_schemas";
     public static final String TOPIC_UNUSED = "topic-unused";
     public static final String TOPIC_WITH_DATA = "topic-with-data";
 
@@ -45,6 +46,7 @@ public class ApplicationTest {
             Set<String> allTopics = client.listTopics().names().get();
 
             assertThat(allTopics)
+                .contains(TOPIC_INTERNAL)
                 .contains(TOPIC_WITH_DATA)
                 .doesNotContain(TOPIC_UNUSED);
         }
@@ -53,7 +55,13 @@ public class ApplicationTest {
     @TestConfiguration
     static class TestTopicConfiguration {
         @Bean
-        public NewTopic unusedTopic() {
+        public NewTopic topicInternal() {
+            return TopicBuilder.name(TOPIC_INTERNAL)
+                .build();
+        }
+
+        @Bean
+        public NewTopic topicUnused() {
             return TopicBuilder.name(TOPIC_UNUSED)
                 .build();
         }

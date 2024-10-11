@@ -1,5 +1,6 @@
 package io.statnett.k3a.topicterminator;
 
+import io.statnett.k3a.topicterminator.strategy.InternalTopic;
 import io.statnett.k3a.topicterminator.strategy.NonEmptyTopic;
 import io.statnett.k3a.topicterminator.strategy.ReservedTopic;
 import org.apache.kafka.clients.admin.AdminClient;
@@ -34,7 +35,7 @@ public class TopicTerminator {
 
             final Set<String> unusedTopics = new HashSet<>(allTopics);
 
-            for (ReservedTopic reservedTopic : reservedTopics()) {
+            for (ReservedTopic reservedTopic : reservedTopics(allTopics)) {
                 unusedTopics.removeAll(reservedTopic.getNames(client));
             }
 
@@ -48,7 +49,7 @@ public class TopicTerminator {
         }
     }
 
-    private List<ReservedTopic> reservedTopics() {
-        return List.of(new NonEmptyTopic());
+    private List<ReservedTopic> reservedTopics(Set<String> allTopics) {
+        return List.of(new NonEmptyTopic(), new InternalTopic(allTopics));
     }
 }
