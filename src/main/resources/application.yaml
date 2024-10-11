@@ -1,6 +1,12 @@
+app:
+  fixed-rate-string: PT1H
 management:
   endpoints:
     web:
       exposure:
         include: "*"
     enabled-by-default: true
+spring:
+  threads:
+    virtual:
+      enabled: true
