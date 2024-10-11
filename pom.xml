@@ -13,6 +13,10 @@
     <artifactId>k3a-topic-terminator</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+    <properties>
+        <java.version>21</java.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>io.micrometer</groupId>
