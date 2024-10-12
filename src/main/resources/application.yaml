@@ -1,4 +1,5 @@
 app:
+  dry-run: true
   fixed-rate-string: PT1H
 management:
   endpoints:

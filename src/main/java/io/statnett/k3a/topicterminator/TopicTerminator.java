@@ -1,5 +1,6 @@
 package io.statnett.k3a.topicterminator;
 
+import io.statnett.k3a.topicterminator.strategy.ConsumedTopic;
 import io.statnett.k3a.topicterminator.strategy.InternalTopic;
 import io.statnett.k3a.topicterminator.strategy.NonEmptyTopic;
 import io.statnett.k3a.topicterminator.strategy.ReservedTopic;
@@ -10,6 +11,7 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,17 +22,17 @@ public class TopicTerminator {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ApplicationProperties props;
-    private final KafkaAdmin admin;
+    private final KafkaAdmin kafkaAdmin;
 
-    public TopicTerminator(ApplicationProperties props, KafkaAdmin admin) {
+    public TopicTerminator(ApplicationProperties props, KafkaAdmin kafkaAdmin) {
         this.props = props;
-        this.admin = admin;
+        this.kafkaAdmin = kafkaAdmin;
     }
 
     @Scheduled(fixedRateString = "${app.fixed-rate-string}")
     public void terminateUnusedTopics() throws ExecutionException, InterruptedException {
         log.info("Terminating unused topics{}", props.isDryRun() ? " in dry-run mode" : "");
-        try (AdminClient client = AdminClient.create(admin.getConfigurationProperties())) {
+        try (AdminClient client = AdminClient.create(kafkaAdmin.getConfigurationProperties())) {
             final Set<String> allTopics = client.listTopics().names().get();
 
             final Set<String> unusedTopics = new HashSet<>(allTopics);
@@ -49,7 +51,11 @@ public class TopicTerminator {
         }
     }
 
-    private List<ReservedTopic> reservedTopics(Set<String> allTopics) {
-        return List.of(new NonEmptyTopic(), new InternalTopic(allTopics));
+    private Collection<ReservedTopic> reservedTopics(Set<String> allTopics) {
+        return List.of(
+            new ConsumedTopic(),
+            new InternalTopic(allTopics),
+            new NonEmptyTopic()
+        );
     }
 }

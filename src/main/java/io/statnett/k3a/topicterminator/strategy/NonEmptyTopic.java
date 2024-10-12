@@ -17,9 +17,9 @@ public class NonEmptyTopic implements ReservedTopic {
 
     @Override
     public Set<String> getNames(AdminClient client) throws ExecutionException, InterruptedException {
-        Set<String> topics = new HashSet<>();
+        final Set<String> topics = new HashSet<>();
 
-        List<Integer> brokers = client.describeCluster()
+        final List<Integer> brokers = client.describeCluster()
             .nodes().get().stream()
             .map(Node::id)
             .collect(Collectors.toList());

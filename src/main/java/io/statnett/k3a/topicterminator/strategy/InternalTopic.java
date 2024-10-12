@@ -9,8 +9,6 @@ import java.util.stream.Collectors;
 /**
  * Topic that is internal, i.e., used by Kafka components, e.g. stream, connect, schema-registry
  */
-
-
 public class InternalTopic implements ReservedTopic {
     private final Set<String> allNames;
 

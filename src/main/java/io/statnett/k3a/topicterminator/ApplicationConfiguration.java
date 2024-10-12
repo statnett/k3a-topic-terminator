@@ -10,7 +10,7 @@ import org.springframework.kafka.core.KafkaAdmin;
 public class ApplicationConfiguration {
 
     @Bean
-    public TopicTerminator topicTerminator(ApplicationProperties props, KafkaAdmin admin) {
-        return new TopicTerminator(props, admin);
+    public TopicTerminator topicTerminator(ApplicationProperties props, KafkaAdmin kafkaAdmin) {
+        return new TopicTerminator(props, kafkaAdmin);
     }
 }
