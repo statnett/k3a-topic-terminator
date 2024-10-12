@@ -37,7 +37,13 @@ public class TopicTerminator {
 
             final Set<String> unusedTopics = new HashSet<>(allTopics);
 
-            for (ReservedTopic reservedTopic : reservedTopics(allTopics)) {
+            Collection<ReservedTopic> reservedTopics = List.of(
+                new ConsumedTopic(),
+                new InternalTopic(allTopics),
+                new NonEmptyTopic()
+            );
+
+            for (ReservedTopic reservedTopic : reservedTopics) {
                 unusedTopics.removeAll(reservedTopic.getNames(client));
             }
 
@@ -51,11 +57,4 @@ public class TopicTerminator {
         }
     }
 
-    private Collection<ReservedTopic> reservedTopics(Set<String> allTopics) {
-        return List.of(
-            new ConsumedTopic(),
-            new InternalTopic(allTopics),
-            new NonEmptyTopic()
-        );
-    }
 }
