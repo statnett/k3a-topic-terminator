@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.2](https://github.com/statnett/k3a-topic-terminator/compare/v0.0.1...v0.0.2) (2024-10-14)
+
+
+### Features
+
+* migrate to structured logging ([#11](https://github.com/statnett/k3a-topic-terminator/issues/11)) ([e10ee75](https://github.com/statnett/k3a-topic-terminator/commit/e10ee7528a424d5e7d4221d8dac9cbf9351021a8))
+
 ## [0.0.1](https://github.com/statnett/k3a-topic-terminator/compare/v0.0.0...v0.0.1) (2024-10-14)
 
 
