@@ -9,7 +9,7 @@ any unused topics, dry-run must be explicitly disabled.
 
 ## Goal
 
-The goal is to terminate (delete) unused topics in Kafka
+The goal is to terminate (delete) unused topics in Kafka.
 Unused topics are topics that match the following three conditions:
 
 - Not internal topic used internally by Kafka components

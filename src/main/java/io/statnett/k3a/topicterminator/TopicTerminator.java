@@ -47,10 +47,10 @@ public class TopicTerminator {
                 unusedTopics.removeAll(reservedTopic.getNames(client));
             }
 
+            log.info("{} topic(s) to be deleted: ", unusedTopics.size());
             if (props.isDryRun()) {
                 unusedTopics.forEach(t -> log.info("Topic {} is considered unused and would be deleted in non dry-run mode", t));
             } else {
-                log.info("{} topic(s) to be deleted: ", unusedTopics.size());
                 unusedTopics.forEach(t -> log.info("Delete unused topic: {}", t));
                 client.deleteTopics(unusedTopics);
             }

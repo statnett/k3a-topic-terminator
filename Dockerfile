@@ -13,4 +13,4 @@ RUN apk update \
   && apk upgrade \
   && rm -rf /var/cache/apk/*
 
-ENTRYPOINT ["java","-jar","k3a-topic-terminator.jar"]
+ENTRYPOINT ["java", "-jar", "k3a-topic-terminator.jar"]

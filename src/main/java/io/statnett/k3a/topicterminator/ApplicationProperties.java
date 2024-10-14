@@ -20,7 +20,7 @@ public class ApplicationProperties {
     /**
      * If set to `true` the application won't delete anything,
      * but just log the topics that would have been deleted if
-     * dry-run disabled.
+     * dry-run was disabled.
      */
     private boolean dryRun;
 

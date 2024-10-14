@@ -50,7 +50,6 @@ public class ApplicationTest {
             await().until(() -> client1.listConsumerGroupOffsets(GROUP_CONSUMER)
                 .partitionsToOffsetAndMetadata().get().keySet().stream()
                 .anyMatch(topicPartition -> topicPartition.topic().equals(TOPIC_CONSUMED)));
-
         }
 
         topicTerminator.terminateUnusedTopics();

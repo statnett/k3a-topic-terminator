@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Topic that is consumed.
  * <p>
- * If a consumer group have not consumed anything for a while,
+ * If a consumer group has not consumed anything for a while,
  * the consumer group is automatically cleaned up by Kafka
  * based on `offset.retention` setting , which is 7 days by default
  */
