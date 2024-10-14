@@ -1,0 +1,14 @@
+app:
+  # TODO: Change dry-run default to false when we know this is not deleting wrong things
+  dry-run: true
+  fixed-rate-string: PT1H
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    enabled-by-default: true
+spring:
+  threads:
+    virtual:
+      enabled: true
