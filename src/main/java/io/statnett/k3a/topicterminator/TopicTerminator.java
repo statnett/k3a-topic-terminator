@@ -31,7 +31,10 @@ public class TopicTerminator {
 
     @Scheduled(fixedRateString = "${app.fixed-rate-string}")
     public void terminateUnusedTopics() throws ExecutionException, InterruptedException {
-        log.info("Terminating unused topics{}", props.isDryRun() ? " in dry-run mode" : "");
+        log.atInfo()
+            .setMessage("Terminating unused topics")
+            .addKeyValue("dry-run", props.isDryRun())
+            .log();
         try (AdminClient client = AdminClient.create(kafkaAdmin.getConfigurationProperties())) {
             final Set<String> allTopics = client.listTopics().names().get();
 
@@ -47,11 +50,20 @@ public class TopicTerminator {
                 unusedTopics.removeAll(reservedTopic.getNames(client));
             }
 
-            log.info("{} topic(s) to be deleted: ", unusedTopics.size());
+            log.atInfo()
+                .setMessage("Start deleting unused topics")
+                .addKeyValue("count", unusedTopics.size())
+                .log();
             if (props.isDryRun()) {
-                unusedTopics.forEach(t -> log.info("Topic {} is considered unused and would be deleted in non dry-run mode", t));
+                unusedTopics.forEach(t -> log.atInfo()
+                    .setMessage("NOT deleting unused topic in dry-run mode")
+                    .addKeyValue("topic", t)
+                    .log());
             } else {
-                unusedTopics.forEach(t -> log.info("Delete unused topic: {}", t));
+                unusedTopics.forEach(t -> log.atInfo()
+                    .setMessage("Deleting unused topic")
+                    .addKeyValue("topic", t)
+                    .log());
                 client.deleteTopics(unusedTopics);
             }
         }
