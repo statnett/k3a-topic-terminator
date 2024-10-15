@@ -39,10 +39,6 @@ The defaults should normally be sufficient, but if required please consult the
 [Spring Boot common application properties](https://docs.spring.io/spring-boot/appendix/application-properties/index.html)
 for reference.
 
-The application provides a
-[Prometheus endpoint](https://docs.spring.io/spring-boot/reference/actuator/metrics.html#actuator.metrics.export.prometheus)
-with all application metrics enabled by default.
-
 Configuration using environment variables is recommended.
 Please see
 [Spring Boot externalized configuration](https://docs.spring.io/spring-boot/reference/features/external-config.html)
@@ -71,3 +67,18 @@ See
 for an overview and
 [application.yaml](src/main/resources/application.yaml)
 for the current default values.
+
+## Observability
+
+The application provides a
+[Prometheus endpoint](https://docs.spring.io/spring-boot/reference/actuator/metrics.html#actuator.metrics.export.prometheus)
+with all application metrics enabled by default.
+
+In addition to the standard JVM and Spring Boot metrics, the application
+provides some application specific metrics:
+
+```
+# HELP topic_deleted_total Number of topics deleted
+# TYPE topic_deleted_total counter
+topic_deleted_total N.0
+```
