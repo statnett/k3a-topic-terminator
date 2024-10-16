@@ -17,7 +17,7 @@ public class InternalTopic implements ReservedTopic {
     }
 
     @Override
-    public Set<String> getNames(AdminClient client) throws ExecutionException, InterruptedException {
+    public Set<String> getNames(AdminClient client) {
         return allNames.stream()
             .filter(this::isInternal)
             .collect(Collectors.toSet());
