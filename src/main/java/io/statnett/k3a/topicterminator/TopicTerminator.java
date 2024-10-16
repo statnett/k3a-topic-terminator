@@ -1,5 +1,7 @@
 package io.statnett.k3a.topicterminator;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.statnett.k3a.topicterminator.strategy.ConsumedTopic;
 import io.statnett.k3a.topicterminator.strategy.InternalTopic;
 import io.statnett.k3a.topicterminator.strategy.NonEmptyTopic;
@@ -23,10 +25,14 @@ public class TopicTerminator {
 
     private final ApplicationProperties props;
     private final KafkaAdmin kafkaAdmin;
+    private final Counter deletedCounter;
 
-    public TopicTerminator(ApplicationProperties props, KafkaAdmin kafkaAdmin) {
+    public TopicTerminator(ApplicationProperties props, KafkaAdmin kafkaAdmin, MeterRegistry meterRegistry) {
         this.props = props;
         this.kafkaAdmin = kafkaAdmin;
+        deletedCounter = Counter.builder("topic.deleted.total")
+            .description("Number of topics deleted")
+            .register(meterRegistry);
     }
 
     @Scheduled(fixedRateString = "${app.fixed-rate-string}")
@@ -65,6 +71,7 @@ public class TopicTerminator {
                     .addKeyValue("topic", t)
                     .log());
                 client.deleteTopics(unusedTopics);
+                deletedCounter.increment(unusedTopics.size());
             }
         }
     }
