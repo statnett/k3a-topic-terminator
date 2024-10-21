@@ -28,7 +28,7 @@ public class ApplicationProperties {
     private boolean dryRun;
 
     /**
-     * Used to specify topics that should retain in the cluster,
+     * Used to specify topics that should be retained in the cluster,
      * even if the topic is marked for termination by the other rules.
      * Can be specified as a list or a comma separated value of topic
      * name regular expressions.
