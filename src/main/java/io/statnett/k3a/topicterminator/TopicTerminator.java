@@ -2,6 +2,7 @@ package io.statnett.k3a.topicterminator;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.statnett.k3a.topicterminator.strategy.BlessedTopic;
 import io.statnett.k3a.topicterminator.strategy.ConsumedTopic;
 import io.statnett.k3a.topicterminator.strategy.InternalTopic;
 import io.statnett.k3a.topicterminator.strategy.NonEmptyTopic;
@@ -49,7 +50,8 @@ public class TopicTerminator {
             Collection<ReservedTopic> reservedTopics = List.of(
                 new ConsumedTopic(),
                 new InternalTopic(allTopics),
-                new NonEmptyTopic()
+                new NonEmptyTopic(),
+                new BlessedTopic(allTopics, props.getBlessedTopics())
             );
 
             for (ReservedTopic reservedTopic : reservedTopics) {
