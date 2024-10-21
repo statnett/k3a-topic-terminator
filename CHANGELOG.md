@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.4](https://github.com/statnett/k3a-topic-terminator/compare/v0.0.3...v0.0.4) (2024-10-21)
+
+
+### Features
+
+* ability to bless (not terminate) topics by name/regex ([#18](https://github.com/statnett/k3a-topic-terminator/issues/18)) ([be2dfda](https://github.com/statnett/k3a-topic-terminator/commit/be2dfda919cb11fb2eda98f1a23928a7002075c6))
+
 ## [0.0.3](https://github.com/statnett/k3a-topic-terminator/compare/v0.0.2...v0.0.3) (2024-10-16)
 
 
