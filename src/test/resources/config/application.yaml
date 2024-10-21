@@ -1,2 +1,3 @@
 app:
   dry-run: false
+  blessed-topics: ^blessed.*,topic-foo

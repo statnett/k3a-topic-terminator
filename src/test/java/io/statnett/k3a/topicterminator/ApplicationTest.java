@@ -35,6 +35,8 @@ public class ApplicationTest {
     public static final String TOPIC_INTERNAL = "_schemas";
     public static final String TOPIC_UNUSED = "topic-unused";
     public static final String TOPIC_WITH_DATA = "topic-with-data";
+    public static final String TOPIC_BLESSED_BY_REGEX = "blessed-topic";
+    public static final String TOPIC_BLESSED_BY_NAME = "topic-foo";
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
@@ -66,7 +68,7 @@ public class ApplicationTest {
             Set<String> allTopics = client.listTopics(new ListTopicsOptions().listInternal(true)).names().get();
 
             assertThat(allTopics)
-                .contains(TOPIC_CONSUMED, TOPIC_INTERNAL, TOPIC_WITH_DATA)
+                .contains(TOPIC_CONSUMED, TOPIC_INTERNAL, TOPIC_WITH_DATA, TOPIC_BLESSED_BY_REGEX, TOPIC_BLESSED_BY_NAME)
                 .doesNotContain(TOPIC_UNUSED);
         }
 
@@ -104,6 +106,18 @@ public class ApplicationTest {
         @Bean
         public NewTopic topicWithData() {
             return TopicBuilder.name(TOPIC_WITH_DATA)
+                .build();
+        }
+
+        @Bean
+        public NewTopic topicBlessedByRegex() {
+            return TopicBuilder.name(TOPIC_BLESSED_BY_REGEX)
+                .build();
+        }
+
+        @Bean
+        public NewTopic topicBlessedByName() {
+            return TopicBuilder.name(TOPIC_BLESSED_BY_NAME)
                 .build();
         }
     }
