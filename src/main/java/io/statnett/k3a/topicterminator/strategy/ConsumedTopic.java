@@ -5,7 +5,6 @@ import org.apache.kafka.clients.admin.ConsumerGroupListing;
 import org.apache.kafka.clients.admin.ListConsumerGroupOffsetsResult;
 import org.apache.kafka.common.TopicPartition;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -19,14 +18,11 @@ import java.util.stream.Collectors;
  */
 public class ConsumedTopic implements ReservedTopic {
     @Override
-    public Set<String> getNames(AdminClient client) throws ExecutionException, InterruptedException {
-        final Set<String> topics = new HashSet<>();
-
+    public Set<String> filter(AdminClient client, Set<String> topicNames) throws ExecutionException, InterruptedException {
         for (ConsumerGroupListing group : client.listConsumerGroups().all().get()) {
-            topics.addAll(getTopics(client.listConsumerGroupOffsets(group.groupId())));
+            topicNames.removeAll(getTopics(client.listConsumerGroupOffsets(group.groupId())));
         }
-
-        return topics;
+        return topicNames;
     }
 
     private Set<String> getTopics(ListConsumerGroupOffsetsResult listConsumerGroupOffsetsResult) throws ExecutionException, InterruptedException {
