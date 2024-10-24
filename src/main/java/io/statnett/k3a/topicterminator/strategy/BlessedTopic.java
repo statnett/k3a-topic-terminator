@@ -3,27 +3,26 @@ package io.statnett.k3a.topicterminator.strategy;
 import org.apache.kafka.clients.admin.AdminClient;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.util.function.Predicate.not;
+
 public class BlessedTopic implements ReservedTopic {
-    private final Set<String> allNames;
     private final Collection<Pattern> patterns;
 
-    public BlessedTopic(Set<String> allNames, Collection<Pattern> patterns) {
-        this.allNames = allNames;
+    public BlessedTopic(Collection<Pattern> patterns) {
         this.patterns = patterns;
     }
 
     @Override
-    public Set<String> getNames(AdminClient client) {
+    public Set<String> filter(AdminClient client, Set<String> topicNames) {
         if (patterns == null || patterns.isEmpty()) {
-            return Collections.emptySet();
+            return topicNames;
         }
-        return allNames.stream()
-            .filter(this::isBlessed)
+        return topicNames.stream()
+            .filter(not(this::isBlessed))
             .collect(Collectors.toSet());
     }
 

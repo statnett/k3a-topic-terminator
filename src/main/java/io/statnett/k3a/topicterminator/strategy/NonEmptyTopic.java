@@ -4,7 +4,6 @@ import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.LogDirDescription;
 import org.apache.kafka.common.Node;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -14,11 +13,8 @@ import java.util.stream.Collectors;
  * Topic that contains data
  */
 public class NonEmptyTopic implements ReservedTopic {
-
     @Override
-    public Set<String> getNames(AdminClient client) throws ExecutionException, InterruptedException {
-        final Set<String> topics = new HashSet<>();
-
+    public Set<String> filter(AdminClient client, Set<String> topicNames) throws ExecutionException, InterruptedException {
         final List<Integer> brokers = client.describeCluster()
             .nodes().get().stream()
             .map(Node::id)
@@ -30,10 +26,10 @@ public class NonEmptyTopic implements ReservedTopic {
             .map(LogDirDescription::replicaInfos)
             .forEach(log -> log.forEach((topicPartition, replicaInfo) -> {
                 if (replicaInfo.size() > 0) {
-                    topics.add(topicPartition.topic());
+                    topicNames.remove(topicPartition.topic());
                 }
             }));
 
-        return topics;
+        return topicNames;
     }
 }
