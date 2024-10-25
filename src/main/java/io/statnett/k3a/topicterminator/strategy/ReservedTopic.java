@@ -6,5 +6,5 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 public interface ReservedTopic {
-    Set<String> getNames(AdminClient client) throws ExecutionException, InterruptedException;
+    Set<String> filter(AdminClient client, Set<String> topicNames) throws ExecutionException, InterruptedException;
 }

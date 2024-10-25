@@ -14,11 +14,13 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 
 @Component
 public class TopicTerminator {
@@ -42,40 +44,89 @@ public class TopicTerminator {
             .setMessage("Terminating unused topics")
             .addKeyValue("dry-run", props.isDryRun())
             .log();
-        try (AdminClient client = AdminClient.create(kafkaAdmin.getConfigurationProperties())) {
-            final Set<String> allTopics = client.listTopics().names().get();
+        from(allTopics())
+            .remove(internalTopics())
+            .remove(blessedTopics(props.getBlessedTopics()))
+            .remove(consumedTopics())
+            .remove(nonEmptyTopics())
+            .terminate();
+    }
 
-            final Set<String> unusedTopics = new HashSet<>(allTopics);
+    private TopicTerminatorChain from(TopicProvider topicProvider) {
+        return new TopicTerminatorChain(topicProvider);
+    }
 
-            Collection<ReservedTopic> reservedTopics = List.of(
-                new ConsumedTopic(),
-                new InternalTopic(allTopics),
-                new NonEmptyTopic(),
-                new BlessedTopic(allTopics, props.getBlessedTopics())
-            );
+    private class TopicTerminatorChain {
+        private final TopicProvider topicProvider;
+        private final List<ReservedTopic> reservedTopics;
 
-            for (ReservedTopic reservedTopic : reservedTopics) {
-                unusedTopics.removeAll(reservedTopic.getNames(client));
+        public TopicTerminatorChain(TopicProvider topicProvider) {
+            this.topicProvider = topicProvider;
+            this.reservedTopics = new ArrayList<>();
+        }
+
+        public void terminate() throws ExecutionException, InterruptedException {
+            try (AdminClient client = AdminClient.create(kafkaAdmin.getConfigurationProperties())) {
+                Set<String> unusedTopics = topicProvider.getNames(client);
+
+                for (ReservedTopic reservedTopic : reservedTopics) {
+                    unusedTopics = reservedTopic.filter(client, unusedTopics);
+                }
+
+                log.atInfo()
+                    .setMessage("Start deleting unused topics")
+                    .addKeyValue("count", unusedTopics.size())
+                    .log();
+                if (props.isDryRun()) {
+                    unusedTopics.forEach(t -> log.atInfo()
+                        .setMessage("NOT deleting unused topic in dry-run mode")
+                        .addKeyValue("topic", t)
+                        .log());
+                } else {
+                    unusedTopics.forEach(t -> log.atInfo()
+                        .setMessage("Deleting unused topic")
+                        .addKeyValue("topic", t)
+                        .log());
+                    client.deleteTopics(unusedTopics);
+                    deletedCounter.increment(unusedTopics.size());
+                }
             }
+        }
 
-            log.atInfo()
-                .setMessage("Start deleting unused topics")
-                .addKeyValue("count", unusedTopics.size())
-                .log();
-            if (props.isDryRun()) {
-                unusedTopics.forEach(t -> log.atInfo()
-                    .setMessage("NOT deleting unused topic in dry-run mode")
-                    .addKeyValue("topic", t)
-                    .log());
-            } else {
-                unusedTopics.forEach(t -> log.atInfo()
-                    .setMessage("Deleting unused topic")
-                    .addKeyValue("topic", t)
-                    .log());
-                client.deleteTopics(unusedTopics);
-                deletedCounter.increment(unusedTopics.size());
-            }
+        public TopicTerminatorChain remove(ReservedTopic reservedTopic) {
+            reservedTopics.add(reservedTopic);
+            return this;
         }
     }
 
+    public interface TopicProvider {
+        Set<String> getNames(AdminClient client) throws ExecutionException, InterruptedException;
+    }
+
+    public static class AllTopicsProvider implements TopicProvider {
+        @Override
+        public Set<String> getNames(AdminClient client) throws ExecutionException, InterruptedException {
+            return new HashSet<>(client.listTopics().names().get());
+        }
+    }
+
+    public static TopicProvider allTopics() {
+        return new AllTopicsProvider();
+    }
+
+    private static InternalTopic internalTopics() {
+        return new InternalTopic();
+    }
+
+    private static BlessedTopic blessedTopics(Collection<Pattern> blessedTopics) {
+        return new BlessedTopic(blessedTopics);
+    }
+
+    private static ConsumedTopic consumedTopics() {
+        return new ConsumedTopic();
+    }
+
+    private static NonEmptyTopic nonEmptyTopics() {
+        return new NonEmptyTopic();
+    }
 }
