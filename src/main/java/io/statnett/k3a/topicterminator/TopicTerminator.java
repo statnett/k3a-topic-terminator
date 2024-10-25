@@ -94,7 +94,7 @@ public class TopicTerminator {
         }
 
         public TopicTerminatorChain remove(ReservedTopic reservedTopic) {
-            this.reservedTopics.add(reservedTopic);
+            reservedTopics.add(reservedTopic);
             return this;
         }
     }
