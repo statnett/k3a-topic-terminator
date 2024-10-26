@@ -2,10 +2,12 @@ package io.statnett.k3a.topicterminator;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.statnett.k3a.topicterminator.strategy.AndOperation;
 import io.statnett.k3a.topicterminator.strategy.BlessedTopic;
 import io.statnett.k3a.topicterminator.strategy.ConsumedTopic;
 import io.statnett.k3a.topicterminator.strategy.InternalTopic;
 import io.statnett.k3a.topicterminator.strategy.NonEmptyTopic;
+import io.statnett.k3a.topicterminator.strategy.ReservedIfTopicNotMatchingProps;
 import io.statnett.k3a.topicterminator.strategy.ReservedTopic;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.slf4j.Logger;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
@@ -48,12 +51,21 @@ public class TopicTerminator {
             .remove(internalTopics())
             .remove(blessedTopics(props.getBlessedTopics()))
             .remove(consumedTopics())
-            .remove(nonEmptyTopics())
+            .remove(
+                and(
+                    nonEmptyTopics(),
+                    reservedTopicsNotMatchingProps(props.getNonEmptyTopicsMatchingProps())
+                )
+            )
             .terminate();
     }
 
     private TopicTerminatorChain from(TopicProvider topicProvider) {
         return new TopicTerminatorChain(topicProvider);
+    }
+
+    private static AndOperation and(ReservedTopic... reservedTopic) {
+        return new AndOperation(reservedTopic);
     }
 
     private class TopicTerminatorChain {
@@ -128,5 +140,9 @@ public class TopicTerminator {
 
     private static NonEmptyTopic nonEmptyTopics() {
         return new NonEmptyTopic();
+    }
+
+    private static ReservedIfTopicNotMatchingProps reservedTopicsNotMatchingProps(Map<String, String> props) {
+        return new ReservedIfTopicNotMatchingProps(props);
     }
 }
