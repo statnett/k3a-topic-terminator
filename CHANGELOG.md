@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.5](https://github.com/statnett/k3a-topic-terminator/compare/v0.0.4...v0.0.5) (2024-10-28)
+
+
+### Features
+
+* add opt-in to terminate non-empty topics matching props ([#25](https://github.com/statnett/k3a-topic-terminator/issues/25)) ([68c4379](https://github.com/statnett/k3a-topic-terminator/commit/68c4379d7f9d691b807b6b0f9a50dd345d491ea7))
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.springframework.boot:spring-boot-starter-parent to v3.3.5 ([#23](https://github.com/statnett/k3a-topic-terminator/issues/23)) ([7382dda](https://github.com/statnett/k3a-topic-terminator/commit/7382dda5956d614f53e5b269ae6d0d19ac06d9b9))
+
 ## [0.0.4](https://github.com/statnett/k3a-topic-terminator/compare/v0.0.3...v0.0.4) (2024-10-21)
 
 
