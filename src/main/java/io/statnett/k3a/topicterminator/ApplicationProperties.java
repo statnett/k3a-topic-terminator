@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @ConfigurationProperties("app")
@@ -35,6 +36,14 @@ public class ApplicationProperties {
      */
     private Collection<Pattern> blessedTopics;
 
+    /**
+     * Can be used to terminate topics even if the topic contains data
+     * (destructive operation) if the topic is otherwise considered unused.
+     * The supplied properties will be matched against topic configuration,
+     * and all properties must match!
+     */
+    private Map<String, String> nonEmptyTopicsMatchingProps;
+
     public String getFixedRateString() {
         return fixedRateString;
     }
@@ -57,5 +66,13 @@ public class ApplicationProperties {
 
     public void setBlessedTopics(Collection<Pattern> blessedTopics) {
         this.blessedTopics = blessedTopics;
+    }
+
+    public Map<String, String> getNonEmptyTopicsMatchingProps() {
+        return nonEmptyTopicsMatchingProps;
+    }
+
+    public void setNonEmptyTopicsMatchingProps(Map<String, String> nonEmptyTopicsMatchingProps) {
+        this.nonEmptyTopicsMatchingProps = nonEmptyTopicsMatchingProps;
     }
 }

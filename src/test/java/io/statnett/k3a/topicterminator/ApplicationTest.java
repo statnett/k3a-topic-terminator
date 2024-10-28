@@ -35,6 +35,7 @@ public class ApplicationTest {
     public static final String TOPIC_INTERNAL = "_schemas";
     public static final String TOPIC_UNUSED = "topic-unused";
     public static final String TOPIC_WITH_DATA = "topic-with-data";
+    public static final String TOPIC_WITH_DATA_COMPACT = "topic-with-data-compact";
     public static final String TOPIC_BLESSED_BY_REGEX = "blessed-topic";
     public static final String TOPIC_BLESSED_BY_NAME = "topic-foo";
 
@@ -54,6 +55,7 @@ public class ApplicationTest {
     void testTerminateUnusedTopics() throws Exception {
         // Put some data on topic-with-data topic
         kafkaTemplate.send(TOPIC_WITH_DATA, "foo").get();
+        kafkaTemplate.send(TOPIC_WITH_DATA_COMPACT, "key", "value").get();
 
         // Wait until consumer is started and registered in cluster
         try (AdminClient client1 = AdminClient.create(kafkaAdmin.getConfigurationProperties())) {
@@ -69,13 +71,13 @@ public class ApplicationTest {
 
             assertThat(allTopics)
                 .contains(TOPIC_CONSUMED, TOPIC_INTERNAL, TOPIC_WITH_DATA, TOPIC_BLESSED_BY_REGEX, TOPIC_BLESSED_BY_NAME)
-                .doesNotContain(TOPIC_UNUSED);
+                .doesNotContain(TOPIC_UNUSED, TOPIC_WITH_DATA_COMPACT);
         }
 
         // Assert delete of topic increases metrics counter
         assertThat(meterRegistry.find("topic.deleted.total").counter())
             .isNotNull()
-            .matches(counter -> counter.count() == 1);
+            .matches(counter -> counter.count() == 2);
     }
 
     @TestConfiguration
@@ -106,6 +108,13 @@ public class ApplicationTest {
         @Bean
         public NewTopic topicWithData() {
             return TopicBuilder.name(TOPIC_WITH_DATA)
+                .build();
+        }
+
+        @Bean
+        public NewTopic topicWithDataCompact() {
+            return TopicBuilder.name(TOPIC_WITH_DATA_COMPACT)
+                .compact()
                 .build();
         }
 
