@@ -5,7 +5,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 @ConfigurationProperties("app")
@@ -39,10 +38,9 @@ public class ApplicationProperties {
     /**
      * Can be used to terminate topics even if the topic contains data
      * (destructive operation) if the topic is otherwise considered unused.
-     * The supplied properties will be matched against topic configuration,
-     * and all properties must match!
+     * By default, no topics with data will be deleted.
      */
-    private Map<String, String> nonEmptyTopicsMatchingProps;
+    private NonEmptyTopicCharacteristics nonEmptyTopics;
 
     public String getFixedRateString() {
         return fixedRateString;
@@ -68,11 +66,26 @@ public class ApplicationProperties {
         this.blessedTopics = blessedTopics;
     }
 
-    public Map<String, String> getNonEmptyTopicsMatchingProps() {
-        return nonEmptyTopicsMatchingProps;
+    public NonEmptyTopicCharacteristics getNonEmptyTopics() {
+        return nonEmptyTopics;
     }
 
-    public void setNonEmptyTopicsMatchingProps(Map<String, String> nonEmptyTopicsMatchingProps) {
-        this.nonEmptyTopicsMatchingProps = nonEmptyTopicsMatchingProps;
+    public void setNonEmptyTopics(NonEmptyTopicCharacteristics nonEmptyTopics) {
+        this.nonEmptyTopics = nonEmptyTopics;
+    }
+
+    public static class NonEmptyTopicCharacteristics {
+        /**
+         * If set to ´true´, topics without time retention can be terminated.
+         */
+        private boolean withoutTimeRetention;
+
+        public boolean isWithoutTimeRetention() {
+            return withoutTimeRetention;
+        }
+
+        public void setWithoutTimeRetention(boolean withoutTimeRetention) {
+            this.withoutTimeRetention = withoutTimeRetention;
+        }
     }
 }

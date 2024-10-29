@@ -7,6 +7,7 @@ import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.ListTopicsOptions;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.common.config.TopicConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
@@ -35,7 +36,7 @@ public class ApplicationTest {
     public static final String TOPIC_INTERNAL = "_schemas";
     public static final String TOPIC_UNUSED = "topic-unused";
     public static final String TOPIC_WITH_DATA = "topic-with-data";
-    public static final String TOPIC_WITH_DATA_COMPACT = "topic-with-data-compact";
+    public static final String TOPIC_WITH_DATA_WITHOUT_TIME_RETENTION = "topic-with-data-without-time-retention";
     public static final String TOPIC_BLESSED_BY_REGEX = "blessed-topic";
     public static final String TOPIC_BLESSED_BY_NAME = "topic-foo";
 
@@ -55,7 +56,7 @@ public class ApplicationTest {
     void testTerminateUnusedTopics() throws Exception {
         // Put some data on topic-with-data topic
         kafkaTemplate.send(TOPIC_WITH_DATA, "foo").get();
-        kafkaTemplate.send(TOPIC_WITH_DATA_COMPACT, "key", "value").get();
+        kafkaTemplate.send(TOPIC_WITH_DATA_WITHOUT_TIME_RETENTION, "key", "value").get();
 
         // Wait until consumer is started and registered in cluster
         try (AdminClient client1 = AdminClient.create(kafkaAdmin.getConfigurationProperties())) {
@@ -71,7 +72,7 @@ public class ApplicationTest {
 
             assertThat(allTopics)
                 .contains(TOPIC_CONSUMED, TOPIC_INTERNAL, TOPIC_WITH_DATA, TOPIC_BLESSED_BY_REGEX, TOPIC_BLESSED_BY_NAME)
-                .doesNotContain(TOPIC_UNUSED, TOPIC_WITH_DATA_COMPACT);
+                .doesNotContain(TOPIC_UNUSED, TOPIC_WITH_DATA_WITHOUT_TIME_RETENTION);
         }
 
         // Assert delete of topic increases metrics counter
@@ -112,9 +113,9 @@ public class ApplicationTest {
         }
 
         @Bean
-        public NewTopic topicWithDataCompact() {
-            return TopicBuilder.name(TOPIC_WITH_DATA_COMPACT)
-                .compact()
+        public NewTopic topicWithDataWithoutTimeRetention() {
+            return TopicBuilder.name(TOPIC_WITH_DATA_WITHOUT_TIME_RETENTION)
+                .config(TopicConfig.RETENTION_MS_CONFIG, "-1")
                 .build();
         }
 
