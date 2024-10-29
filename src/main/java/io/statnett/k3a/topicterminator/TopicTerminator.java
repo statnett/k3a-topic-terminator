@@ -10,6 +10,7 @@ import io.statnett.k3a.topicterminator.strategy.NonEmptyTopic;
 import io.statnett.k3a.topicterminator.strategy.ReservedIfTopicNotMatchingProps;
 import io.statnett.k3a.topicterminator.strategy.ReservedTopic;
 import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.common.config.TopicConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
@@ -24,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
+
 
 @Component
 public class TopicTerminator {
@@ -47,16 +49,19 @@ public class TopicTerminator {
             .setMessage("Terminating unused topics")
             .addKeyValue("dry-run", props.isDryRun())
             .log();
+
+        ReservedTopic nonEmptyTopic = nonEmptyTopics();
+        if (props.getNonEmptyTopics().isWithoutTimeRetention()) {
+            nonEmptyTopic = and(nonEmptyTopic, reservedTopicsNotMatchingProps(
+                Map.of(TopicConfig.RETENTION_MS_CONFIG, "-1")
+            ));
+        }
+
         from(allTopics())
             .remove(internalTopics())
             .remove(blessedTopics(props.getBlessedTopics()))
             .remove(consumedTopics())
-            .remove(
-                and(
-                    nonEmptyTopics(),
-                    reservedTopicsNotMatchingProps(props.getNonEmptyTopicsMatchingProps())
-                )
-            )
+            .remove(nonEmptyTopic)
             .terminate();
     }
 

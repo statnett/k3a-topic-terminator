@@ -1,5 +1,5 @@
 app:
   dry-run: false
   blessed-topics: ^blessed.*,topic-foo
-  non-empty-topics-matching-props:
-    cleanup.policy: compact
+  non-empty-topics:
+    without-time-retention: true
