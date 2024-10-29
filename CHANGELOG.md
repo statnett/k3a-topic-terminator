@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.0](https://github.com/statnett/k3a-topic-terminator/compare/v0.0.5...v0.1.0) (2024-10-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* better UX to configure non-empty topic deletion ([#27](https://github.com/statnett/k3a-topic-terminator/issues/27))
+
+### Features
+
+* better UX to configure non-empty topic deletion ([#27](https://github.com/statnett/k3a-topic-terminator/issues/27)) ([8e8f491](https://github.com/statnett/k3a-topic-terminator/commit/8e8f491f3acff5b671f94eb4b6cc74a73ef3c47a))
+
 ## [0.0.5](https://github.com/statnett/k3a-topic-terminator/compare/v0.0.4...v0.0.5) (2024-10-28)
 
 
