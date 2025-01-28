@@ -40,7 +40,7 @@ public class ApplicationProperties {
      * (destructive operation) if the topic is otherwise considered unused.
      * By default, no topics with data will be deleted.
      */
-    private NonEmptyTopicCharacteristics nonEmptyTopics;
+    private NonEmptyTopicCharacteristics nonEmptyTopics = new NonEmptyTopicCharacteristics();
 
     public String getFixedRateString() {
         return fixedRateString;
