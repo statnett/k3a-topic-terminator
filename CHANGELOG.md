@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.3...v0.1.4) (2025-01-28)
+
+
+### Bug Fixes
+
+* initialize NonEmptyTopicCharacteristics to avoid NPE ([#39](https://github.com/statnett/k3a-topic-terminator/issues/39)) ([530644c](https://github.com/statnett/k3a-topic-terminator/commit/530644c5c011e33d95a74cafbee2ea1848fbee86))
+
 ## [0.1.3](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.2...v0.1.3) (2025-01-23)
 
 
