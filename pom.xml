@@ -10,7 +10,7 @@
 
     <groupId>io.statnett.k3a</groupId>
     <artifactId>k3a-topic-terminator</artifactId>
-    <version>0.1.8-SNAPSHOT</version>
+    <version>0.1.8</version>
 
     <properties>
         <java.version>21</java.version>
