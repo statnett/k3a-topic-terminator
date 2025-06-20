@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.11](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.10...v0.1.11) (2025-06-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.springframework.boot:spring-boot-starter-parent to v3.5.3 ([#62](https://github.com/statnett/k3a-topic-terminator/issues/62)) ([ec48c50](https://github.com/statnett/k3a-topic-terminator/commit/ec48c5066f3f2aab32447ce9b3b901a735f3fef3))
+
 ## [0.1.10](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.9...v0.1.10) (2025-06-19)
 
 
