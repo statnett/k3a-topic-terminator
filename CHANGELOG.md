@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.16](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.15...v0.1.16) (2025-10-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency net.logstash.logback:logstash-logback-encoder to v9 ([#90](https://github.com/statnett/k3a-topic-terminator/issues/90)) ([5daa9a8](https://github.com/statnett/k3a-topic-terminator/commit/5daa9a850d31e770f5fac6ed444977bdaf93f085))
+
 ## [0.1.15](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.14...v0.1.15) (2025-10-24)
 
 
