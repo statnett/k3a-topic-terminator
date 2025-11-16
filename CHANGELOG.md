@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.17](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.16...v0.1.17) (2025-11-16)
+
+
+### Features
+
+* upgrade Java to 25 ([#101](https://github.com/statnett/k3a-topic-terminator/issues/101)) ([fc0fb30](https://github.com/statnett/k3a-topic-terminator/commit/fc0fb307fb564ac103d6ed3240c4b3933181533f))
+
 ## [0.1.16](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.15...v0.1.16) (2025-10-29)
 
 
