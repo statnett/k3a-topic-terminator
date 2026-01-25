@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.21](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.20...v0.1.21) (2026-01-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.springframework.boot:spring-boot-starter-parent to v4.0.2 ([#126](https://github.com/statnett/k3a-topic-terminator/issues/126)) ([ab11ce3](https://github.com/statnett/k3a-topic-terminator/commit/ab11ce3125bd0f7766cf0c1bcc61da53b055c985))
+
 ## [0.1.20](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.19...v0.1.20) (2025-12-19)
 
 
