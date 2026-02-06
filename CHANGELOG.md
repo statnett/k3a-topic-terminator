@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.22](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.21...v0.1.22) (2026-02-06)
+
+
+### Bug Fixes
+
+* **deps:** update eclipse-temurin docker tag to v25.0.2_10-jre-alpine ([#134](https://github.com/statnett/k3a-topic-terminator/issues/134)) ([3c94abf](https://github.com/statnett/k3a-topic-terminator/commit/3c94abf54a454ed01fce43a173ac9b4222a176db))
+
 ## [0.1.21](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.20...v0.1.21) (2026-01-25)
 
 
