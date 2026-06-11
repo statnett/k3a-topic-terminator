@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.27](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.26...v0.1.27) (2026-06-11)
+
+
+### Bug Fixes
+
+* **deps:** update spring boot to v4.1.0 ([#198](https://github.com/statnett/k3a-topic-terminator/issues/198)) ([f0f69f5](https://github.com/statnett/k3a-topic-terminator/commit/f0f69f5aa7280aa4ebc74a22dc2a25836af9e953))
+
 ## [0.1.26](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.25...v0.1.26) (2026-04-26)
 
 
