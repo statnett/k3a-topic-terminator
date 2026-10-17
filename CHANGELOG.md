@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.29](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.28...v0.1.29) (2026-10-17)
+
+
+### Bug Fixes
+
+* **deps:** update maven:3-eclipse-temurin-25 docker digest to 9b5f82b ([#255](https://github.com/statnett/k3a-topic-terminator/issues/255)) ([77760d8](https://github.com/statnett/k3a-topic-terminator/commit/77760d8ac4612e6cff8eb0e22d468ac13415a33a))
+
 ## [0.1.28](https://github.com/statnett/k3a-topic-terminator/compare/v0.1.27...v0.1.28) (2026-08-23)
 
 
